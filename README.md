@@ -24,25 +24,5 @@ AI-Skin-Care is a fun and interactive Streamlit web app that lets users **snap a
 4. A simple scoring algorithm generates a Health Score
 5. Custom feedback is displayed based on the score
 
----
-
-## 📦 Tech Stack
-
-- [Streamlit](https://streamlit.io/)
-- [Pillow (PIL)](https://python-pillow.org/)
-- [NumPy](https://numpy.org/)
-
----
-
-## 🧪 Installation & Running Locally
-
-```bash
-# Clone the repo
-git clone https://github.com/yourusername/ai-skin-care.git
-cd ai-skin-care
-
-# Install dependencies
-pip install streamlit pillow numpy
-
 # Run the app
 streamlit run ai_skin_care_app.py
