@@ -18,9 +18,7 @@ page = st.sidebar.radio("Go to", ["Home", "Instructions", "Analyze Your Face Ski
 
 if page == "Home":
     st.title("💆‍♀️ AI-Skin-Care")
-    st.markdown("Take a photo of your face and get your skin **Health Score** out of 100!")
-    st.image("https://via.placeholder.com/600x300", caption="AI-Skin-Care Demo", use_column_width=True)
-    st.markdown("---")
+
     st.markdown("🔬 *This is a demo app. For actual skin analysis, consult a dermatologist.*")
 
 elif page == "Instructions":
