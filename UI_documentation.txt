@@ -1,0 +1,41 @@
+UI Documentation for AI-Skin-Care Streamlit App
+
+1. Home Page
+
+Title: "💆‍♀️ AI-Skin-Care"
+
+Description: Introduction and disclaimer.
+
+Sidebar Navigation: Links to Home, Instructions, Analyze Your Face Skin, Feedback.
+
+2. Instructions Page
+
+Title: "📖 Instructions"
+
+Steps: Guidance on lighting, makeup removal, camera positioning, and taking a photo.
+
+3. Analyze Your Face Skin Page
+
+Camera Input: Capture a clear photo of your face.
+
+Display: Shows the captured photo and skin health score (0-100).
+
+Score Interpretation:
+
+80+ (Excellent)
+
+50-79 (Decent)
+
+<50 (Needs Improvement)
+
+4. Feedback Page
+
+Title: "📝 Feedback"
+
+Text Area: Users can provide feedback and submit it.
+
+5. General Features
+
+Simple, centered layout with clear navigation.
+
+Easy-to-use components like camera input and score display.
