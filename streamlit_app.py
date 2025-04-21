@@ -20,11 +20,10 @@ model_data = BytesIO(response.content)
 model_state_dict = torch.load(model_data, map_location=torch.device('cpu'))
 
 # Define and load the model
-device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+
 model = models.resnet18(pretrained=False)
 model.fc = nn.Linear(model.fc.in_features, 3)  # 3 classes
 model.load_state_dict(model_state_dict)
-model = model.to(device)
 model.eval()
 
 # Define class names
