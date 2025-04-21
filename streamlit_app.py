@@ -383,7 +383,7 @@ elif page == "Model Monitering Dashboard":
     combined_df = pd.concat([train_df, new_samples], ignore_index=True)
     
     # ----------- Box Plot ----------- #
-    st.subheader("Box Plot: Training vs Prod Image Dimensions")
+    #st.subheader("Box Plot: Training vs Prod Image Dimensions")
     
     fig_box = make_subplots(rows=1, cols=2, subplot_titles=("Width", "Height"))
     
@@ -398,12 +398,12 @@ elif page == "Model Monitering Dashboard":
                 row=1, col=i
             )
     
-    fig_box.update_layout(height=500, width=1000)
+    fig_box.update_layout(title = 'Box Plot: Training vs Prod Image Dimensions', height=500, width=1000)
     st.plotly_chart(fig_box)
     
     
     # ----------- Height Range Plot: Training vs New Heights ----------- #
-    st.subheader("Height Range: Training vs Prod Image Heights")
+    #st.subheader("Height Range: Training vs Prod Image Heights")
     
     x_range = [200, 700]
     
@@ -441,7 +441,7 @@ elif page == "Model Monitering Dashboard":
     
     # X-axis only plot
     fig.update_layout(
-        title = 'Train Height Range and Prod Image Heights',
+        title = 'Height Range: Training vs Prod Image Heights',
         xaxis=dict(range=x_range, title='Image Height', showgrid=False),
         yaxis=dict(visible=False),
         height=400,
@@ -474,7 +474,7 @@ elif page == "Model Monitering Dashboard":
 
     
     # ----------- Class Imbalance Monitoring ----------- #
-    st.header("Class Imbalance Monitoring : (Δy)")
+    st.header("Output Monitoring (Δy)")
     
     # Train and New class counts
     train_class_counts = {'Class 0': 483, 'Class 1': 623, 'Class 2': 175}
