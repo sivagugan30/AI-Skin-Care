@@ -27,19 +27,50 @@ elif page == "Instructions":
 
 elif page == "Analyze Your Face Skin":
     st.title("🔍 Analyze Your Face Skin")
-    camera_photo = st.camera_input("📸 Take a clear photo of your face")
-    if camera_photo is not None:
+    st.markdown("Choose a method to analyze your skin:")
+
+    col1, col2 = st.columns(2)
+    uploaded_image = None
+
+    with col1:
+        st.markdown("### 📤 Upload an Image")
+        uploaded_image = st.file_uploader("Upload a clear photo of your face", type=["jpg", "jpeg", "png"])
+
+    with col2:
+        st.markdown("### 📸 Take a Photo")
+        camera_photo = st.camera_input("Use your webcam")
+
+    image = None
+    if uploaded_image is not None:
+        image = Image.open(uploaded_image).convert("RGB")
+        st.success("✅ Image uploaded successfully!")
+
+    elif camera_photo is not None:
         image = Image.open(camera_photo).convert("RGB")
-        st.image(image, caption='Your Photo', use_column_width=True)
-        score = calculate_health_score(image)
+        st.success("✅ Photo captured successfully!")
+
+    if image:
+        st.image(image, caption='Your Face Photo', use_column_width=True)
+        with st.spinner("Analyzing your skin health..."):
+            score = calculate_health_score(image)
+
         st.subheader("🧬 Your Skin Health Score:")
         st.markdown(f"<h1 style='color: teal; font-size: 60px'>{score} / 100</h1>", unsafe_allow_html=True)
-        if score >= 80:
-            st.success("Excellent skin! Keep doing what you're doing! 💧✨")
-        elif score >= 50:
-            st.info("Looking decent! With a regular skincare routine, you can glow up. 🌿🧴")
-        else:
-            st.warning("Consider improving hydration, sleep, and skincare. 🧼💧")
+
+        with st.expander("💡 What does this mean?"):
+            if score >= 80:
+                st.success("Excellent skin! Keep doing what you're doing! 💧✨")
+                st.markdown("✅ Well-hydrated\n✅ Balanced complexion\n✅ Low pore visibility")
+            elif score >= 50:
+                st.info("Looking decent! With a regular skincare routine, you can glow up. 🌿🧴")
+                st.markdown("✔️ Minor dullness\n✔️ Some uneven texture\n💡 Try moisturizing regularly")
+            else:
+                st.warning("Consider improving hydration, sleep, and skincare. 🧼💧")
+                st.markdown("⚠️ Dryness or dull tone\n⚠️ Visible spots or texture\n💡 Drink more water and sleep well")
+
+        st.balloons()
+    else:
+        st.info("👈 Upload a photo or take one to start your skin analysis.")
 
 elif page == "Feedback":
     st.title("📝 Feedback")
