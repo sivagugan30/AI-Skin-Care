@@ -273,7 +273,7 @@ elif page == "Analyze Your Face Skin":
         final_score = int((brightness_score * 0.4 + contrast_score * 0.6))
         return final_score
 
-    st.title("🔍 Analyze Your Face Skin")
+    st.title("Analyze Your Face Skin")
     st.markdown("Choose a method to analyze your skin:")
     
     option = st.radio("Select input type:", ["Upload an Image", "Take a Photo"])
