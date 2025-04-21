@@ -480,7 +480,7 @@ elif page == "Model Monitering Dashboard":
     st.title("Production Data vs Training Confidence Interval")
     
     # X-axis range
-    x_range = [100, 1000]
+    x_range = [200, 700]
     
     # Confidence Interval
     ci_start = 300
@@ -499,7 +499,7 @@ elif page == "Model Monitering Dashboard":
         x1=ci_end,
         y0=-0.02,
         y1=0.02,
-        fillcolor="rgba(0, 0, 255, 0.2)",  # Light blue
+        fillcolor="rgba(0, 0, 255, 0.8)",  # Light blue
         line=dict(width=0),
         layer="below"
     )
