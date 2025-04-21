@@ -305,7 +305,7 @@ elif page == "Analyze Your Face Skin":
                 comments = "Mild acne. Keep up a gentle skincare routine and stay hydrated!"
               elif "1_" in filename:
                 score = random.randint(65, 75)
-                comments = "⚠Moderate acne. Consider using salicylic acid cleansers and avoid touching your face."
+                comments = "Moderate acne. Consider using salicylic acid cleansers and avoid touching your face."
               elif "2_" in filename:
                 score = random.randint(50, 60)
                 comments = "Severe acne. It's best to consult a dermatologist for tailored treatment."                
@@ -314,7 +314,7 @@ elif page == "Analyze Your Face Skin":
                 comments = "Skin analyzed based on image properties."
 
             # Show score
-            st.subheader("🧬 Your Skin Health Score:")
+            st.write("Your Skin Health Score:")
             st.markdown(f"<h1 style='color: teal; font-size: 60px'>{score} / 100</h1>", unsafe_allow_html=True)
             st.write(comments)
 
