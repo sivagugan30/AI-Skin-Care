@@ -370,7 +370,7 @@ elif page == "Model Monitering Dashboard":
     #st.title("Model Monitoring")
     
     # ----------- Input Monitoring Section ----------- #
-    st.markdown("### Input Monitoring (Δx)")
+    st.header("Input Monitoring: (Δx)")
     
     # Prepare train and new data
     train_df = df[['width', 'height']].copy()
@@ -479,7 +479,7 @@ elif page == "Model Monitering Dashboard":
 
     st.markdown("<hr style='width:100%; height:1px; border:none; background-color:#bbb;'>", unsafe_allow_html=True)
     # ----------- Class Imbalance Monitoring ----------- #
-    st.header("Output Monitoring (Δy)")
+    st.header("Output Monitoring: (Δy)")
     
     # Train and New class counts
     train_class_counts = {'Class 0': 483, 'Class 1': 623, 'Class 2': 175}
