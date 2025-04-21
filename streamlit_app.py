@@ -499,7 +499,7 @@ elif page == "Model Monitering Dashboard":
         x1=ci_end,
         y0=-0.02,
         y1=0.02,
-        fillcolor="rgba(0, 0, 255, 0.8)",  # Light blue
+        fillcolor="rgba(0, 0, 255, 0.9)",  # Light blue
         line=dict(width=0),
         layer="below"
     )
@@ -511,7 +511,7 @@ elif page == "Model Monitering Dashboard":
             y=[-0.02, 0.02],
             mode='lines',
             line=dict(color='red', width=2),
-            showlegend=False
+            showlegend=True
         ))
     
     # X-axis only plot
