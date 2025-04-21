@@ -71,7 +71,7 @@ if page == "Documentation":
         st.write('Data Source: [Kaggle Acne Dataset](https://www.kaggle.com/datasets/manuelhettich/acne04)')
 
         st.write("#### Process Diagram")
-        process_diagram_path = "/Users/sivaguganjayachandran/PycharmProjects/AI-Skin-Care/data/Process Diagram.png"
+        process_diagram_path = "data/Process Diagram.png"
         if os.path.exists(process_diagram_path):
             process_diagram = Image.open(process_diagram_path)
             st.image(process_diagram, caption="AI Skin Care Pipeline",use_container_width=True)
@@ -94,7 +94,7 @@ if page == "Documentation":
         st.markdown("### Standardizing Image Dimensions")
 
         # Load the saved CSV
-        input_path = os.path.expanduser("~/Downloads/image_dimensions.csv")
+        input_path = os.path.expanduser("data/image_dimensions.csv")
         try:
             df = pd.read_csv(input_path)
 
