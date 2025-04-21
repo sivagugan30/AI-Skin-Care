@@ -17,7 +17,7 @@ st.sidebar.title("Navigation")
 page = st.sidebar.radio("Go to", ["Home", "Instructions", "Analyze Your Face Skin", "Feedback"])
 
 if page == "Home":
-    st.title("💆‍♀️ AI-Skin-Care")
+    st.title("💆‍♀️ AI-Skin-Care 10:11 PM")
 
     st.markdown("🔬 *This is a demo app. For actual skin analysis, consult a dermatologist.*")
 
