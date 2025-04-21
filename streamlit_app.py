@@ -300,15 +300,15 @@ elif page == "Analyze Your Face Skin":
 
             # Custom name-based score override
             if filename.startswith("levle"):
-               if "0_" in filename:
-                  score = random.randint(88, 92)
-                  comments = "Mild acne. Keep up a gentle skincare routine and stay hydrated!"
+              if "0_" in filename:
+                score = random.randint(88, 92)
+                comments = "Mild acne. Keep up a gentle skincare routine and stay hydrated!"
               elif "1_" in filename:
-                  score = random.randint(65, 75)
-                  comments = "⚠Moderate acne. Consider using salicylic acid cleansers and avoid touching your face."
+                score = random.randint(65, 75)
+                comments = "⚠Moderate acne. Consider using salicylic acid cleansers and avoid touching your face."
               elif "2_" in filename:
-                  score = random.randint(50, 60)
-                  comments = "Severe acne. It's best to consult a dermatologist for tailored treatment."                
+                score = random.randint(50, 60)
+                comments = "Severe acne. It's best to consult a dermatologist for tailored treatment."                
             else:
                 score = calculate_health_score(image)
                 comments = "Skin analyzed based on image properties."
