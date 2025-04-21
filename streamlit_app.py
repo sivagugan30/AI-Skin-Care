@@ -63,7 +63,8 @@ elif page == "Analyze Your Face Skin":
                 st.warning("Consider improving hydration, sleep, and skincare. 🧼💧")
                 st.markdown("⚠️ Dryness or dull tone\n⚠️ Visible spots or texture\n💡 Drink more water and sleep well")
 
-        st.balloons()
+        st.toast("", icon="ðŸŽ‰")
+
     else:
         st.info("👈 Upload a photo or take one to start your skin analysis.")
 
