@@ -232,7 +232,7 @@ if page == "Documentation":
         
         # ---------- Simulated ROC Curve ----------
         
-        st.subheader("Classification Power: ROC Curve Analysis")
+        st.subheader("Classification Check: ROC Curve Analysis")
         
         n_samples = 100
         n_classes = 3
