@@ -487,7 +487,7 @@ elif page == "Model Monitering Dashboard":
     ci_end = 600
     
     # Production data points (within CI)
-    prod_data_points = [320, 350, 400, 450, 500, 580]
+    prod_data_points = [320, 325, 352, 350, 400, 420,450, 500, 507]
     
     # Create Plotly figure
     fig = go.Figure()
@@ -521,10 +521,25 @@ elif page == "Model Monitering Dashboard":
         height=200,
         margin=dict(t=30, b=30),
         annotations=[
-            dict(x=(ci_start + ci_end) / 2, y=0.03, text="🟦 95% Confidence Interval of Training Data", showarrow=False),
-            dict(x=prod_data_points[0], y=0.05, text="🔴 Production data", showarrow=False)
-        ]
-    )
+        dict(
+            x=(ci_start + ci_end) / 2,
+            y=0.05,
+            text="🟦 95% Confidence Interval of Training Data",
+            showarrow=False,
+            font=dict(size=12),
+            yanchor="bottom"
+        ),
+        dict(
+            x=prod_data_points[0],
+            y=0.08,
+            text="🔴 Production data",
+            showarrow=False,
+            font=dict(size=12),
+            yanchor="bottom"
+        )
+    ]
+)
+
     
     # Display plot
     st.plotly_chart(fig, use_container_width=True)
