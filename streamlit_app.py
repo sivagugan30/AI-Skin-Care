@@ -372,7 +372,7 @@ elif page == "Model Monitering Dashboard":
     # ----------- Input Monitoring Section ----------- #
     st.markdown("### Input Monitoring (Δx)")
     st.markdown("""
-    Monitoring the input data ensures the model continues to receive data that matches its expected structure. Below we examine image dimensions from both training and incoming (new) datasets.
+    Monitoring the input data ensures the model continues to receive data that matches its expected structure. Below we examine image dimensions from both training and incoming (prod) datasets.
     """)
     
     # Prepare train and new data
@@ -381,17 +381,17 @@ elif page == "Model Monitering Dashboard":
     
     np.random.seed(42)
     new_samples = train_df.sample(n=10).copy()
-    new_samples['dataset'] = 'New'
+    new_samples['dataset'] = 'Prod'
     
     combined_df = pd.concat([train_df, new_samples], ignore_index=True)
     
     # ----------- Box Plot ----------- #
-    st.subheader("Box Plot: Training vs New Image Dimensions")
+    st.subheader("Box Plot: Training vs Prod Image Dimensions")
     
     fig_box = make_subplots(rows=1, cols=2, subplot_titles=("Width", "Height"))
     
     for i, dim in enumerate(['width', 'height'], start=1):
-        for label, color in zip(['Train', 'New'], ['#20B2AA', '#FF69B4']):
+        for label, color in zip(['Train', 'Prod'], ['#20B2AA', '#FF69B4']):
             fig_box.add_trace(
                 go.Box(
                     y=combined_df[combined_df['dataset'] == label][dim],
@@ -406,12 +406,12 @@ elif page == "Model Monitering Dashboard":
     
     st.markdown("""
     **Observations:**
-    - The box plot shows the range and spread of both width and height across the training and new data.
-    - New data aligns well with training distribution, suggesting dimensional consistency.
+    - The box plot shows the range and spread of both width and height across the training and prod data.
+    - Prod data aligns well with training distribution, suggesting dimensional consistency.
     """)
     
     # ----------- Height Range Plot: Training vs New Heights ----------- #
-    st.subheader("Height Range: Training vs New Image Heights")
+    st.subheader("Height Range: Training vs Prod Image Heights")
     
     train_min = train_df['height'].min()
     train_max = train_df['height'].max()
@@ -440,7 +440,7 @@ elif page == "Model Monitering Dashboard":
     
     # Update layout
     fig_strip.update_layout(
-        title="Train Height Range and New Image Heights",
+        title="Train Height Range and Prod Image Heights",
         xaxis_title="Height",
         yaxis_title="Normalized Range",
         xaxis=dict(range=[train_min - 5, train_max + 5]),
@@ -454,8 +454,8 @@ elif page == "Model Monitering Dashboard":
     st.markdown("""
     **Observations:**
     - The green band represents the full height range of training data.
-    - Each crimson strip corresponds to a new image's height.
-    - This visualization helps verify whether new image heights are within acceptable bounds.
+    - Each crimson strip corresponds to a prod image's height.
+    - This visualization helps verify whether prod image heights are within acceptable bounds.
     """)
     
     
@@ -469,7 +469,7 @@ elif page == "Model Monitering Dashboard":
     train_df_class = pd.DataFrame(train_class_counts.items(), columns=['Class', 'Count'])
     new_df_class = pd.DataFrame(new_class_counts.items(), columns=['Class', 'Count'])
     
-    fig_class = make_subplots(rows=1, cols=2, subplot_titles=("Training Class Distribution", "New Data Class Distribution"))
+    fig_class = make_subplots(rows=1, cols=2, subplot_titles=("Training Class Distribution", "Prod Data Class Distribution"))
     
     fig_class.add_trace(go.Bar(
         x=train_df_class["Class"], y=train_df_class["Count"],
@@ -480,7 +480,7 @@ elif page == "Model Monitering Dashboard":
     fig_class.add_trace(go.Bar(
         x=new_df_class["Class"], y=new_df_class["Count"],
         marker_color=['#FF6347', '#4682B4', '#9ACD32'],
-        name="New"
+        name="Prod"
     ), row=1, col=2)
     
     fig_class.update_layout(height=500, width=1000, showlegend=False)
@@ -489,7 +489,7 @@ elif page == "Model Monitering Dashboard":
     st.markdown("""
     **Observations:**
     - Training data shows an imbalance favoring Class 1, with Class 2 being underrepresented.
-    - The new data shows a heavy dominance of Class 2.
+    - The prod data shows a heavy dominance of Class 2.
     - This could affect model performance, especially if the model is sensitive to class distributions or not retrained with the updated distribution.
     """)
     
