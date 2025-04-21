@@ -14,10 +14,21 @@ def calculate_health_score(image_pil):
 
 st.set_page_config(page_title="AI-Skin-Care", layout="centered")
 st.sidebar.title("Navigation")
-page = st.sidebar.radio("Go to", ["Home", "Instructions", "Analyze Your Face Skin", "Feedback"])
+page = st.sidebar.radio("Go to", ["Home", "Instructions", "Analyze Your Face Skin", "Documentation", "Feedback"])
+process_diagram_path = "/Users/sivaguganjayachandran/PycharmProjects/AI-Skin-Care/data/Process Diagram.png"
+
+if page == "Process Diagram":
+    st.write("Process Diagram")
+    process_diagram = Image.open(process_diagram_path)
+
+if page == "EDA":
+    st.write("Exploratory Data Analysis")
+
+
+
 
 if page == "Home":
-    st.title("💆‍♀️ AI-Skin-Care 10:11 PM")
+    st.title("💆‍♀️ AI-Skin-Care")
 
     st.markdown("🔬 *This is a demo app. For actual skin analysis, consult a dermatologist.*")
 
