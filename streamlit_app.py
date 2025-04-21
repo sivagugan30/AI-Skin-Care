@@ -261,21 +261,20 @@ elif page == "Documentation":
         
         st.write("The ROC curve above demonstrates the model’s ability to distinguish between classes. AUC values closer to 1 indicate strong discriminative power and better classification performance.")
 
-
-def calculate_health_score(image_pil):
-    grayscale_img = ImageOps.grayscale(image_pil)
-    img_array = np.array(grayscale_img).astype('float')
-    brightness = np.mean(img_array)
-    contrast = np.std(img_array)
-    brightness_score = max(0, min(100, (brightness - 50) * 1.2))
-    contrast_score = max(0, min(100, (contrast - 20) * 2))
-    final_score = int((brightness_score * 0.4 + contrast_score * 0.6))
-    return final_score
-
 elif page == "Analyze Your Face Skin":
+    def calculate_health_score(image_pil):
+      grayscale_img = ImageOps.grayscale(image_pil)
+      img_array = np.array(grayscale_img).astype('float')
+      brightness = np.mean(img_array)
+      contrast = np.std(img_array)
+      brightness_score = max(0, min(100, (brightness - 50) * 1.2))
+      contrast_score = max(0, min(100, (contrast - 20) * 2))
+      final_score = int((brightness_score * 0.4 + contrast_score * 0.6))
+    return final_score
+  
     st.title("🔍 Analyze Your Face Skin")
     st.markdown("Choose a method to analyze your skin:")
-
+    
     option = st.radio("Select input type:", ["Upload an Image", "Take a Photo"])
     image = None
 
