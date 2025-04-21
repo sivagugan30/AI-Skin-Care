@@ -1,16 +1,62 @@
+import requests
+import torch
+from io import BytesIO
+from torchvision import models
+import torch.nn as nn
 import streamlit as st
 from PIL import Image, ImageOps
 import numpy as np
+import random
+from torchvision import transforms
 
-def calculate_health_score(image_pil):
-    grayscale_img = ImageOps.grayscale(image_pil)
-    img_array = np.array(grayscale_img).astype('float')
-    brightness = np.mean(img_array)
-    contrast = np.std(img_array)
-    brightness_score = max(0, min(100, (brightness - 50) * 1.2))
-    contrast_score = max(0, min(100, (contrast - 20) * 2))
-    final_score = int((brightness_score * 0.4 + contrast_score * 0.6))
-    return final_score
+# URL to Google Drive raw .pth file
+model_url = 'https://drive.google.com/uc?export=download&id=1alJZXduCaKEEcTrxLYDtF112fY1BXZZQ'
+
+# Download the .pth file
+response = requests.get(model_url)
+model_data = BytesIO(response.content)
+
+# Load the model from the .pth file
+model_state_dict = torch.load(model_data, map_location=torch.device('cpu'))
+
+# Define and load the model
+device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+model = models.resnet18(pretrained=False)
+model.fc = nn.Linear(model.fc.in_features, 3)  # 3 classes
+model.load_state_dict(model_state_dict)
+model = model.to(device)
+model.eval()
+
+# Define class names
+class_names = ['Level 0', 'Level 1', 'Level 2']
+
+# Image transforms
+test_transform = transforms.Compose([
+    transforms.Resize((224, 224)),
+    transforms.ToTensor(),
+    transforms.Normalize([0.5], [0.5])
+])
+
+def acne_score(pred_class):
+    if pred_class == 0:
+        return random.randint(50, 60)
+    elif pred_class == 1:
+        return random.randint(70, 80)
+    elif pred_class == 2:
+        return random.randint(90, 100)
+    else:
+        return 0
+
+def calculate_health_score(image):
+    img_tensor = test_transform(image).unsqueeze(0).to(device)
+    with torch.no_grad():
+        output = model(img_tensor)
+        _, predicted = torch.max(output, 1)
+    pred_class = predicted.item()
+    score = acne_score(pred_class)
+    return score, pred_class
+
+# Streamlit app code
 
 st.set_page_config(page_title="AI-Skin-Care", layout="centered")
 st.sidebar.title("Navigation")
@@ -47,10 +93,11 @@ elif page == "Analyze Your Face Skin":
     if image:
         st.image(image, caption='Your Face Photo', use_column_width=True)
         with st.spinner("Analyzing your skin health..."):
-            score = calculate_health_score(image)
+            score, predicted_class = calculate_health_score(image)
 
         st.subheader("🧬 Your Skin Health Score:")
         st.markdown(f"<h1 style='color: teal; font-size: 60px'>{score} / 100</h1>", unsafe_allow_html=True)
+        st.write(f"🔍 **Predicted Acne Severity Level:** `{class_names[predicted_class]}`")
 
         with st.expander("💡 What does this mean?"):
             if score >= 80:
@@ -63,7 +110,7 @@ elif page == "Analyze Your Face Skin":
                 st.warning("Consider improving hydration, sleep, and skincare. 🧼💧")
                 st.markdown("⚠️ Dryness or dull tone\n⚠️ Visible spots or texture\n💡 Drink more water and sleep well")
 
-        st.ballons()
+        st.balloons()
 
     else:
         st.info("👈 Upload a photo or take one to start your skin analysis.")
