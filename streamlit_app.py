@@ -12,15 +12,7 @@ import random
 from PIL import Image, ImageEnhance, ImageFilter
 
 
-def calculate_health_score(image_pil):
-    grayscale_img = ImageOps.grayscale(image_pil)
-    img_array = np.array(grayscale_img).astype('float')
-    brightness = np.mean(img_array)
-    contrast = np.std(img_array)
-    brightness_score = max(0, min(100, (brightness - 50) * 1.2))
-    contrast_score = max(0, min(100, (contrast - 20) * 2))
-    final_score = int((brightness_score * 0.4 + contrast_score * 0.6))
-    return final_score
+
 
 st.set_page_config(page_title="AI-Skin-Care", layout="centered")
 
@@ -30,6 +22,14 @@ st.set_page_config(page_title="AI-Skin-Care", layout="centered")
 st.sidebar.title("Navigation")
 page = st.sidebar.radio("Go to", ["Home", "Instructions", "Analyze Your Face Skin", "Documentation",
                                   "Model Monitering Dashboard", "Feedback"])
+if page == "Home":
+    st.title("💆‍♀️ AI-Skin-Care")
+
+    st.markdown("🔬 *This is a demo app. For actual skin analysis, consult a dermatologist.*")
+
+elif page == "Instructions":
+    st.title("📖 Instructions")
+    st.markdown("1. Make sure you are in a well-lit environment.\n2. Remove any heavy makeup for an accurate result.\n3. Position your face clearly in the camera frame.\n4. Click the 'Take Photo' button.\n5. Wait for your skin health score!")
 
 if page == "Documentation":
     tab1, tab2, tab3, tab4 = st.tabs(["Data Collection", "Data Analysis", "Image Processing", "Model Development"])
@@ -262,16 +262,15 @@ if page == "Documentation":
         st.write("The ROC curve above demonstrates the model’s ability to distinguish between classes. AUC values closer to 1 indicate strong discriminative power and better classification performance.")
 
 
-
-
-if page == "Home":
-    st.title("💆‍♀️ AI-Skin-Care")
-
-    st.markdown("🔬 *This is a demo app. For actual skin analysis, consult a dermatologist.*")
-
-elif page == "Instructions":
-    st.title("📖 Instructions")
-    st.markdown("1. Make sure you are in a well-lit environment.\n2. Remove any heavy makeup for an accurate result.\n3. Position your face clearly in the camera frame.\n4. Click the 'Take Photo' button.\n5. Wait for your skin health score!")
+def calculate_health_score(image_pil):
+    grayscale_img = ImageOps.grayscale(image_pil)
+    img_array = np.array(grayscale_img).astype('float')
+    brightness = np.mean(img_array)
+    contrast = np.std(img_array)
+    brightness_score = max(0, min(100, (brightness - 50) * 1.2))
+    contrast_score = max(0, min(100, (contrast - 20) * 2))
+    final_score = int((brightness_score * 0.4 + contrast_score * 0.6))
+    return final_score
 
 elif page == "Analyze Your Face Skin":
     st.title("🔍 Analyze Your Face Skin")
