@@ -492,16 +492,17 @@ elif page == "Model Monitering Dashboard":
     # Create Plotly figure
     fig = go.Figure()
     
-    # Add shaded CI region
-    fig.add_trace(go.Scatter(
-        x=[ci_start, ci_end, ci_end, ci_start],
-        y=[0, 0, 0, 0],
-        fill='toself',
-        fillcolor='rgba(0, 0, 255, 0.2)',
-        line=dict(color='rgba(255,255,255,0)'),
-        showlegend=False,
-        name="95% CI"
-    ))
+    # Add shaded blue CI region
+    fig.add_shape(
+        type="rect",
+        x0=ci_start,
+        x1=ci_end,
+        y0=-0.02,
+        y1=0.02,
+        fillcolor="rgba(0, 0, 255, 0.2)",  # Light blue
+        line=dict(width=0),
+        layer="below"
+    )
     
     # Add vertical red lines for production points
     for x in prod_data_points:
@@ -515,11 +516,10 @@ elif page == "Model Monitering Dashboard":
     
     # X-axis only plot
     fig.update_layout(
-        xaxis=dict(range=x_range, title='Value'),
+        xaxis=dict(range=x_range, title='Value', showgrid=False),
         yaxis=dict(visible=False),
         height=200,
         margin=dict(t=30, b=30),
-        shapes=[],
         annotations=[
             dict(x=(ci_start + ci_end) / 2, y=0.03, text="🟦 95% Confidence Interval of Training Data", showarrow=False),
             dict(x=prod_data_points[0], y=0.05, text="🔴 Production data", showarrow=False)
@@ -530,4 +530,4 @@ elif page == "Model Monitering Dashboard":
     st.plotly_chart(fig, use_container_width=True)
     
     # Final comment
-    st.markdown("### Data Drift = False")
+    st.markdown("### ✅ Data Drift = False")
