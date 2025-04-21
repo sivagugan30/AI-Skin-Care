@@ -35,7 +35,7 @@ if page == "Documentation":
             st.write("")
             st.write("Images are processed using various techniques to enhance quality and prepare them for model input.")
 
-        image_path = '/Users/sivaguganjayachandran/PycharmProjects/AI-Skin-Care/data/0/levle0_1.jpg'
+        image_path = 'data/0/levle0_1.jpg'
         original_image = Image.open(image_path)
 
         # 1. Resize
