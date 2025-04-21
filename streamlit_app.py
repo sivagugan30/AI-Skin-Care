@@ -159,12 +159,7 @@ if page == "Documentation":
         st.write(
             "Class imbalance is evident — 'Severe' is underrepresented. This could impact model fairness and performance.")
 
-    with tab2:
-        
-    #    st.markdown("### Standardizing Image Dimensions")
-    
-        from sklearn.metrics import roc_curve, auc
-        from sklearn.preprocessing import label_binarize
+    with tab4:
         
         st.write("")
         # ---------- Simulated Data for Accuracy & Loss ----------
