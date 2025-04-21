@@ -511,7 +511,7 @@ elif page == "Model Monitering Dashboard":
             y=[-0.02, 0.02],
             mode='lines',
             line=dict(color='red', width=2),
-            showlegend=True
+            showlegend=False
         ))
     
     # X-axis only plot
@@ -544,5 +544,4 @@ elif page == "Model Monitering Dashboard":
     # Display plot
     st.plotly_chart(fig, use_container_width=True)
     
-    # Final comment
-    st.markdown("### ✅ Data Drift = False")
+    st.markdown('<h3 style="color: green; font-size: 24px;">Data Drift = False</h3>', unsafe_allow_html=True)
