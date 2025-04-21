@@ -355,7 +355,7 @@ elif page == "Analyze Your Face Skin":
         st.balloons()
 
     else:
-        st.info("👈 Upload a photo or take one to start your skin analysis.")
+        #st.info("👈 Upload a photo or take one to start your skin analysis.")
 elif page == "Feedback":
     st.title("📝 Feedback")
     feedback_text = st.text_area("Share your thoughts about the app:")
