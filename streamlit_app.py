@@ -400,8 +400,11 @@ elif page == "Model Monitering Dashboard":
     
     fig_box.update_layout(title = 'Box Plot: Training vs Prod Image Dimensions', height=500, width=1000)
     st.plotly_chart(fig_box)
-    
-    
+
+    st.markdown('<span style="font-size: 20px;">Data Drift = </span>'
+              '<span style="color: green; font-size: 24px;"><b>False</b></span>',
+              unsafe_allow_html=True)
+      
     # ----------- Height Range Plot: Training vs New Heights ----------- #
     #st.subheader("Height Range: Training vs Prod Image Heights")
     
@@ -470,7 +473,9 @@ elif page == "Model Monitering Dashboard":
     # Display plot
     st.plotly_chart(fig, use_container_width=True)
     
-    st.markdown('<h3 style="color: green; font-size: 24px;">Data Drift = False</h3>', unsafe_allow_html=True)
+    st.markdown('<span style="font-size: 20px;">Data Drift = </span>'
+            '<span style="color: green; font-size: 24px;"><b>False</b></span>',
+            unsafe_allow_html=True)
 
     
     # ----------- Class Imbalance Monitoring ----------- #
@@ -499,5 +504,8 @@ elif page == "Model Monitering Dashboard":
     
     fig_class.update_layout(height=500, width=1000, showlegend=False)
     st.plotly_chart(fig_class)
-    
-    
+
+    st.markdown('<span style="font-size: 20px;">Concept Drift = </span>'
+              '<span style="color: green; font-size: 24px;"><b>False</b></span>',
+              unsafe_allow_html=True)
+      
