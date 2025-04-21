@@ -31,7 +31,7 @@ elif page == "Instructions":
     st.title("📖 Instructions")
     st.markdown("1. Make sure you are in a well-lit environment.\n2. Remove any heavy makeup for an accurate result.\n3. Position your face clearly in the camera frame.\n4. Click the 'Take Photo' button.\n5. Wait for your skin health score!")
 
-if page == "Documentation":
+elif page == "Documentation":
     tab1, tab2, tab3, tab4 = st.tabs(["Data Collection", "Data Analysis", "Image Processing", "Model Development"])
     with tab3:
         with tab3:
