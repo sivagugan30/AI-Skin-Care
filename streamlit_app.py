@@ -405,81 +405,6 @@ elif page == "Model Monitering Dashboard":
     # ----------- Height Range Plot: Training vs New Heights ----------- #
     st.subheader("Height Range: Training vs Prod Image Heights")
     
-    train_min = 300
-    train_max = 600
-    
-    fig_strip = go.Figure()
-    
-    # Add the training height range as a filled rectangle
-    fig_strip.add_shape(
-        type="rect",
-        x0=train_min, y0=0, x1=train_max, y1=1,
-        line=dict(color="lightgreen", width=3),
-        fillcolor="lightgreen", opacity=0.3
-    )
-    
-    # Add vertical strips for new image heights
-    for height in new_samples['height']:
-        fig_strip.add_trace(
-            go.Scatter(
-                x=[height, height],
-                y=[0, 1],
-                mode="lines",
-                line=dict(color="crimson", width=4),
-                showlegend=False
-            )
-        )
-    
-    # Update layout
-    fig_strip.update_layout(
-        title="Train Height Range and Prod Image Heights",
-        xaxis_title="Height",
-        yaxis_title="Normalized Range",
-        xaxis=dict(range=[train_min - 5, train_max + 5]),
-        yaxis=dict(range=[0, 1]),
-        height=400,
-        width=800
-    )
-    
-    st.plotly_chart(fig_strip)
-    
-    
-    # ----------- Class Imbalance Monitoring ----------- #
-    st.header("Class Imbalance Monitoring : (Δy)")
-    
-    # Train and New class counts
-    train_class_counts = {'Class 0': 483, 'Class 1': 623, 'Class 2': 175}
-    new_class_counts = {'Class 0': 2, 'Class 1': 3, 'Class 2': 15}  # Class 2 dominates in new data
-    
-    train_df_class = pd.DataFrame(train_class_counts.items(), columns=['Class', 'Count'])
-    new_df_class = pd.DataFrame(new_class_counts.items(), columns=['Class', 'Count'])
-    
-    fig_class = make_subplots(rows=1, cols=2, subplot_titles=("Training Class Distribution", "Prod Data Class Distribution"))
-    
-    fig_class.add_trace(go.Bar(
-        x=train_df_class["Class"], y=train_df_class["Count"],
-        marker_color=['#FFA07A', '#20B2AA', '#9370DB'],
-        name="Train"
-    ), row=1, col=1)
-    
-    fig_class.add_trace(go.Bar(
-        x=new_df_class["Class"], y=new_df_class["Count"],
-        marker_color=['#FF6347', '#4682B4', '#9ACD32'],
-        name="Prod"
-    ), row=1, col=2)
-    
-    fig_class.update_layout(height=500, width=1000, showlegend=False)
-    st.plotly_chart(fig_class)
-
-
-    st.write('---------')
-    import streamlit as st
-    import plotly.graph_objects as go
-    
-    # Title
-    st.title("Production Data vs Training Confidence Interval")
-    
-    # X-axis range
     x_range = [200, 700]
     
     # Confidence Interval
@@ -516,6 +441,7 @@ elif page == "Model Monitering Dashboard":
     
     # X-axis only plot
     fig.update_layout(
+        title = 'Train Height Range and Prod Image Heights',
         xaxis=dict(range=x_range, title='Value', showgrid=False),
         yaxis=dict(visible=False),
         height=200,
@@ -545,3 +471,41 @@ elif page == "Model Monitering Dashboard":
     st.plotly_chart(fig, use_container_width=True)
     
     st.markdown('<h3 style="color: green; font-size: 24px;">Data Drift = False</h3>', unsafe_allow_html=True)
+
+    
+    # ----------- Class Imbalance Monitoring ----------- #
+    st.header("Class Imbalance Monitoring : (Δy)")
+    
+    # Train and New class counts
+    train_class_counts = {'Class 0': 483, 'Class 1': 623, 'Class 2': 175}
+    new_class_counts = {'Class 0': 2, 'Class 1': 3, 'Class 2': 15}  # Class 2 dominates in new data
+    
+    train_df_class = pd.DataFrame(train_class_counts.items(), columns=['Class', 'Count'])
+    new_df_class = pd.DataFrame(new_class_counts.items(), columns=['Class', 'Count'])
+    
+    fig_class = make_subplots(rows=1, cols=2, subplot_titles=("Training Class Distribution", "Prod Data Class Distribution"))
+    
+    fig_class.add_trace(go.Bar(
+        x=train_df_class["Class"], y=train_df_class["Count"],
+        marker_color=['#FFA07A', '#20B2AA', '#9370DB'],
+        name="Train"
+    ), row=1, col=1)
+    
+    fig_class.add_trace(go.Bar(
+        x=new_df_class["Class"], y=new_df_class["Count"],
+        marker_color=['#FF6347', '#4682B4', '#9ACD32'],
+        name="Prod"
+    ), row=1, col=2)
+    
+    fig_class.update_layout(height=500, width=1000, showlegend=False)
+    st.plotly_chart(fig_class)
+
+
+    st.write('---------')
+    import streamlit as st
+    import plotly.graph_objects as go
+    
+    # Title
+    st.title("Production Data vs Training Confidence Interval")
+    
+    
