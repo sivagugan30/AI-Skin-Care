@@ -444,7 +444,7 @@ elif page == "Model Monitering Dashboard":
         title = 'Train Height Range and Prod Image Heights',
         xaxis=dict(range=x_range, title='Image Height', showgrid=False),
         yaxis=dict(visible=False),
-        height=500,
+        height=400,
         margin=dict(t=30, b=30),
         annotations=[
         dict(
@@ -499,13 +499,5 @@ elif page == "Model Monitering Dashboard":
     
     fig_class.update_layout(height=500, width=1000, showlegend=False)
     st.plotly_chart(fig_class)
-
-
-    st.write('---------')
-    import streamlit as st
-    import plotly.graph_objects as go
-    
-    # Title
-    st.title("Production Data vs Training Confidence Interval")
     
     
