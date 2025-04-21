@@ -3,4 +3,4 @@ torch
 torchvision
 matplotlib
 plotly
-sklearn
+scikit-learn
