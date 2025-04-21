@@ -271,7 +271,7 @@ elif page == "Analyze Your Face Skin":
       brightness_score = max(0, min(100, (brightness - 50) * 1.2))
       contrast_score = max(0, min(100, (contrast - 20) * 2))
       final_score = int((brightness_score * 0.4 + contrast_score * 0.6))
-    return final_score
+      return final_score
   
     st.title("🔍 Analyze Your Face Skin")
     st.markdown("Choose a method to analyze your skin:")
