@@ -362,7 +362,7 @@ elif page == "Feedback":
     if st.button("Submit Feedback"):
         st.success("Thank you for your feedback! 💙")
 
-elif page == "":
+elif page == "Model Monitering Dashboard":
     # Load dimension CSV
     df = pd.read_csv("data/image_dimensions.csv")  # should contain 'width', 'height'
     
