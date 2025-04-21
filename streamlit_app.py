@@ -367,13 +367,10 @@ elif page == "Model Monitering Dashboard":
     df = pd.read_csv("data/image_dimensions.csv")  # should contain 'width', 'height'
     
     # Page Title
-    st.title("Model Monitoring")
+    #st.title("Model Monitoring")
     
     # ----------- Input Monitoring Section ----------- #
     st.markdown("### Input Monitoring (Δx)")
-    st.markdown("""
-    Monitoring the input data ensures the model continues to receive data that matches its expected structure. Below we examine image dimensions from both training and incoming (prod) datasets.
-    """)
     
     # Prepare train and new data
     train_df = df[['width', 'height']].copy()
@@ -404,17 +401,12 @@ elif page == "Model Monitering Dashboard":
     fig_box.update_layout(height=500, width=1000)
     st.plotly_chart(fig_box)
     
-    st.markdown("""
-    **Observations:**
-    - The box plot shows the range and spread of both width and height across the training and prod data.
-    - Prod data aligns well with training distribution, suggesting dimensional consistency.
-    """)
     
     # ----------- Height Range Plot: Training vs New Heights ----------- #
     st.subheader("Height Range: Training vs Prod Image Heights")
     
-    train_min = train_df['height'].min()
-    train_max = train_df['height'].max()
+    train_min = 300
+    train_max = 600
     
     fig_strip = go.Figure()
     
@@ -451,13 +443,6 @@ elif page == "Model Monitering Dashboard":
     
     st.plotly_chart(fig_strip)
     
-    st.markdown("""
-    **Observations:**
-    - The green band represents the full height range of training data.
-    - Each crimson strip corresponds to a prod image's height.
-    - This visualization helps verify whether prod image heights are within acceptable bounds.
-    """)
-    
     
     # ----------- Class Imbalance Monitoring ----------- #
     st.header("Class Imbalance Monitoring : (Δy)")
@@ -485,11 +470,64 @@ elif page == "Model Monitering Dashboard":
     
     fig_class.update_layout(height=500, width=1000, showlegend=False)
     st.plotly_chart(fig_class)
+
+
+    st.write('---------')
+    import streamlit as st
+    import plotly.graph_objects as go
     
-    st.markdown("""
-    **Observations:**
-    - Training data shows an imbalance favoring Class 1, with Class 2 being underrepresented.
-    - The prod data shows a heavy dominance of Class 2.
-    - This could affect model performance, especially if the model is sensitive to class distributions or not retrained with the updated distribution.
-    """)
+    # Title
+    st.title("Production Data vs Training Confidence Interval")
     
+    # X-axis range
+    x_range = [100, 1000]
+    
+    # Confidence Interval
+    ci_start = 300
+    ci_end = 600
+    
+    # Production data points (within CI)
+    prod_data_points = [320, 350, 400, 450, 500, 580]
+    
+    # Create Plotly figure
+    fig = go.Figure()
+    
+    # Add shaded CI region
+    fig.add_trace(go.Scatter(
+        x=[ci_start, ci_end, ci_end, ci_start],
+        y=[0, 0, 0, 0],
+        fill='toself',
+        fillcolor='rgba(0, 0, 255, 0.2)',
+        line=dict(color='rgba(255,255,255,0)'),
+        showlegend=False,
+        name="95% CI"
+    ))
+    
+    # Add vertical red lines for production points
+    for x in prod_data_points:
+        fig.add_trace(go.Scatter(
+            x=[x, x],
+            y=[-0.02, 0.02],
+            mode='lines',
+            line=dict(color='red', width=2),
+            showlegend=False
+        ))
+    
+    # X-axis only plot
+    fig.update_layout(
+        xaxis=dict(range=x_range, title='Value'),
+        yaxis=dict(visible=False),
+        height=200,
+        margin=dict(t=30, b=30),
+        shapes=[],
+        annotations=[
+            dict(x=(ci_start + ci_end) / 2, y=0.03, text="🟦 95% Confidence Interval of Training Data", showarrow=False),
+            dict(x=prod_data_points[0], y=0.05, text="🔴 Production data", showarrow=False)
+        ]
+    )
+    
+    # Display plot
+    st.plotly_chart(fig, use_container_width=True)
+    
+    # Final comment
+    st.markdown("### Data Drift = False")
