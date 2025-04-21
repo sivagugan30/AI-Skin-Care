@@ -442,14 +442,14 @@ elif page == "Model Monitering Dashboard":
     # X-axis only plot
     fig.update_layout(
         title = 'Train Height Range and Prod Image Heights',
-        xaxis=dict(range=x_range, title='Value', showgrid=False),
+        xaxis=dict(range=x_range, title='Image Height', showgrid=False),
         yaxis=dict(visible=False),
-        height=200,
+        height=500,
         margin=dict(t=30, b=30),
         annotations=[
         dict(
             x=(ci_start + ci_end) / 2,
-            y=0.05,
+            y=0.08,
             text="🟦 95% Confidence Interval of Training Data",
             showarrow=False,
             font=dict(size=12),
