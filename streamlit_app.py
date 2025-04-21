@@ -231,6 +231,9 @@ if page == "Documentation":
         st.write("Different optimizers converge at different rates. Adam generally performs better in this simulation, but real-world performance may vary based on architecture and data.")
         
         # ---------- Simulated ROC Curve ----------
+        
+        st.subheader("Classification Power: ROC Curve Analysis")
+        
         n_samples = 100
         n_classes = 3
         y_true = np.random.randint(0, n_classes, size=n_samples)
