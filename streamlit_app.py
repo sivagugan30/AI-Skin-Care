@@ -189,43 +189,43 @@ elif page == "Analyze Your Face Skin":
             # Score calculation
             score = calculate_health_score(image)
 
-            # Show score
-            #st.subheader("🧬 Your Skin Health Score:")
-            #st.markdown(f"<h1 style='color: teal; font-size: 60px'>{score} / 100</h1>", unsafe_allow_html=True)
+            #Show score
+            st.subheader("🧬 Your Skin Health Score:")
+            st.markdown(f"<h1 style='color: teal; font-size: 60px'>{score} / 100</h1>", unsafe_allow_html=True)
 
-            # 🧠 Load model and predict class
-            import torch
-            import torchvision.transforms as transforms
-            from torchvision import models  # or your custom model import
-            from PIL import Image
+            # # 🧠 Load model and predict class
+            # import torch
+            # import torchvision.transforms as transforms
+            # from torchvision import models  # or your custom model import
+            # from PIL import Image
 
-            device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+            # device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-            # Load model (define your model architecture if it's custom)
-            model = models.resnet18(pretrained=False)
-            model.fc = torch.nn.Linear(model.fc.in_features, 3)  # assuming 3 classes
-            model.load_state_dict(torch.load("model/acne_model.pth", map_location=device))
-            model.to(device)
-            model.eval()
+            # # Load model (define your model architecture if it's custom)
+            # model = models.resnet18(pretrained=False)
+            # model.fc = torch.nn.Linear(model.fc.in_features, 3)  # assuming 3 classes
+            # model.load_state_dict(torch.load("model/acne_model.pth", map_location=device))
+            # model.to(device)
+            # model.eval()
 
-            class_names = ["Mild", "Moderate", "Severe"]  # Customize to your labels
+            # class_names = ["Mild", "Moderate", "Severe"]  # Customize to your labels
 
-            # Transform and predict
-            test_transform = transforms.Compose([
-                transforms.Resize((224, 224)),
-                transforms.ToTensor(),
-                transforms.Normalize([0.5], [0.5])
-            ])
+            # # Transform and predict
+            # test_transform = transforms.Compose([
+            #     transforms.Resize((224, 224)),
+            #     transforms.ToTensor(),
+            #     transforms.Normalize([0.5], [0.5])
+            # ])
 
-            img_tensor = test_transform(image).unsqueeze(0).to(device)
+            # img_tensor = test_transform(image).unsqueeze(0).to(device)
 
-            with torch.no_grad():
-                output = model(img_tensor)
-                _, predicted = torch.max(output, 1)
+            # with torch.no_grad():
+            #     output = model(img_tensor)
+            #     _, predicted = torch.max(output, 1)
 
-            predicted_class = class_names[predicted.item()]
+            # predicted_class = class_names[predicted.item()]
 
-            st.markdown("Predicted Acne Severity Level:" + f"<h2 style='color: #d62728;'>{predicted_class}</h2>", unsafe_allow_html=True)
+            # st.markdown("Predicted Acne Severity Level:" + f"<h2 style='color: #d62728;'>{predicted_class}</h2>", unsafe_allow_html=True)
 
         st.balloons()
 
