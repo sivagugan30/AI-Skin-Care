@@ -449,7 +449,7 @@ elif page == "Model Monitering Dashboard":
         annotations=[
         dict(
             x=(ci_start + ci_end) / 2,
-            y=0.5,
+            y=0.01,
             text="🟦 95% Confidence Interval of Training Data",
             showarrow=False,
             font=dict(size=12),
@@ -457,7 +457,7 @@ elif page == "Model Monitering Dashboard":
         ),
         dict(
             x=prod_data_points[0],
-            y=0.5,
+            y=0.01,
             text="🔴 Production data",
             showarrow=False,
             font=dict(size=12),
