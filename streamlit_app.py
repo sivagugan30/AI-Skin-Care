@@ -31,8 +31,10 @@ elif page == "Analyze Your Face Skin":
 
     option = st.radio("Select input type:", ["Upload an Image", "Take a Photo"])
    
-    
     image = None
+    uploaded_image = None 
+    camera_photo = None 
+    
     if option == "Upload an Image":
         image = Image.open(uploaded_image).convert("RGB")
         st.success("Image uploaded successfully!")
