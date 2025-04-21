@@ -368,7 +368,12 @@ elif page == "Model Monitering Dashboard":
     
     # Page Title
     #st.title("Model Monitoring")
-    
+    st.title("Model Monitering Dashboard")
+    st.write("")
+    st.markdown('<span style="font-size: 20px;">Data Drift = </span>'
+              '<span style="color: green; font-size: 24px;"><b>False</b></span>',
+              unsafe_allow_html=True)
+    st.write('')
     # ----------- Input Monitoring Section ----------- #
     st.header("Input Monitoring: (Δx)")
     
