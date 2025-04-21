@@ -262,6 +262,7 @@ elif page == "Documentation":
         st.write("The ROC curve above demonstrates the model’s ability to distinguish between classes. AUC values closer to 1 indicate strong discriminative power and better classification performance.")
 
 elif page == "Analyze Your Face Skin":
+    
     def calculate_health_score(image_pil):
       grayscale_img = ImageOps.grayscale(image_pil)
       img_array = np.array(grayscale_img).astype('float')
