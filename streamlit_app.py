@@ -404,7 +404,7 @@ elif page == "Model Monitering Dashboard":
     st.markdown('<span style="font-size: 20px;">Data Drift = </span>'
               '<span style="color: green; font-size: 24px;"><b>False</b></span>',
               unsafe_allow_html=True)
-      
+    st.write('')
     # ----------- Height Range Plot: Training vs New Heights ----------- #
     #st.subheader("Height Range: Training vs Prod Image Heights")
     
@@ -477,7 +477,7 @@ elif page == "Model Monitering Dashboard":
             '<span style="color: green; font-size: 24px;"><b>False</b></span>',
             unsafe_allow_html=True)
 
-    
+    st.markdown("<hr style='width:100%; height:1px; border:none; background-color:#bbb;'>", unsafe_allow_html=True)
     # ----------- Class Imbalance Monitoring ----------- #
     st.header("Output Monitoring (Δy)")
     
