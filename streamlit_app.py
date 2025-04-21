@@ -29,25 +29,17 @@ elif page == "Analyze Your Face Skin":
     st.title("🔍 Analyze Your Face Skin")
     st.markdown("Choose a method to analyze your skin:")
 
-    col1, col2 = st.columns(2)
-    uploaded_image = None
-
-    with col1:
-        st.markdown("### 📤 Upload an Image")
-        uploaded_image = st.file_uploader("Upload a clear photo of your face", type=["jpg", "jpeg", "png"])
-
-    with col2:
-        st.markdown("### 📸 Take a Photo")
-        camera_photo = st.camera_input("Use your webcam")
-
+    option = st.radio("Select input type:", ["Upload an Image", "Take a Photo"])
+   
+    
     image = None
-    if uploaded_image is not None:
+    if option == "Upload an Image":
         image = Image.open(uploaded_image).convert("RGB")
-        st.success("✅ Image uploaded successfully!")
+        st.success("Image uploaded successfully!")
 
-    elif camera_photo is not None:
+    if option == "Take a Photo":
         image = Image.open(camera_photo).convert("RGB")
-        st.success("✅ Photo captured successfully!")
+        st.success("Photo captured successfully!")
 
     if image:
         st.image(image, caption='Your Face Photo', use_column_width=True)
