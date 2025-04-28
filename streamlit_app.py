@@ -14,7 +14,8 @@ from plotly.subplots import make_subplots
 
 
 
-st.set_page_config(page_title="AI-Skin-Care", layout="centered")
+st.set_page_config(page_title="AI-Skin-Care", layout="wide")
+
 
 
 
