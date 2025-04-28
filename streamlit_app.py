@@ -360,7 +360,7 @@ elif page == "Feedback":
     st.title("Feedback")
     feedback_text = st.text_area("Share your thoughts about the app:")
     if st.button("Submit Feedback"):
-        st.success("Thank you for your feedback! 💙")
+        st.success("Thank you for your feedback!")
 
 elif page == "Model Monitering Dashboard":
     # Load dimension CSV
