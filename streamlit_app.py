@@ -40,6 +40,7 @@ def predict(image_path, model):
     return prediction
 
 pkl_path = "https://raw.githubusercontent.com/sivagugan30/AI-Skin-Care/main/data/acne_full_model.pkl"
+
 image_path = "https://github.com/sivagugan30/AI-Skin-Care/tree/main/data/1"
 
 # Load the model
