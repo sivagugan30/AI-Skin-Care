@@ -2,6 +2,73 @@ import streamlit as st
 from PIL import Image, ImageOps
 import numpy as np
 
+
+import torch
+from torchvision import transforms
+from PIL import Image
+
+
+import torch
+import requests
+import tempfile
+
+def load_model_from_url(model_url):
+    # Download the model file to a temporary file
+    response = requests.get(model_url)
+    response.raise_for_status()  # Raise error if download failed
+
+    with tempfile.NamedTemporaryFile(delete=False) as tmp_file:
+        tmp_file.write(response.content)
+        tmp_file_path = tmp_file.name
+
+    # Load the model from the temporary file
+    model = torch.load(tmp_file_path, weights_only=False, map_location=torch.device('cpu'))
+    model.eval()
+    return model
+
+
+def load_model(pkl_path):
+    """
+    Loads the model from the specified pickle path.
+    """
+    # Load model (including architecture and weights)
+    model = torch.load(pkl_path, weights_only=False, map_location=torch.device('cpu'))
+    model.eval()  # Set model to evaluation mode
+    return model
+
+def predict(image_path, model):
+    """
+    Given an image path and a trained model, this function predicts the class.
+    """
+    # Image preprocessing (adjust this based on your model's expected input)
+    transform = transforms.Compose([
+        transforms.Resize((224, 224)),  # Update if your model expects another size
+        transforms.ToTensor(),
+        transforms.Normalize(mean=[0.485, 0.456, 0.406],  # Example: for pretrained ResNet
+                             std=[0.229, 0.224, 0.225])
+    ])
+
+    # Load and transform image
+    image = Image.open(image_path).convert('RGB')
+    input_tensor = transform(image).unsqueeze(0)  # Add batch dimension
+
+    # Predict
+    with torch.no_grad():
+        output = model(input_tensor)
+        prediction = torch.argmax(output, dim=1).item()
+
+    return prediction
+
+model_url = "https://raw.githubusercontent.com/sivagugan30/AI-Skin-Care/main/data/acne_full_model.pkl"
+model = load_model_from_url(model_url)
+
+image_path = "https://github.com/sivagugan30/AI-Skin-Care/tree/main/data/1"
+
+
+# Predict on the image
+predicted_class = predict(image_path, model)
+
+
 def calculate_health_score(image_pil):
     grayscale_img = ImageOps.grayscale(image_pil)
     img_array = np.array(grayscale_img).astype('float')
@@ -150,6 +217,7 @@ if page == "Documentation":
 
 if page == "Home":
     st.title("💆‍♀️ AI-Skin-Care")
+    st.write(f"Predicted class: {predicted_class}")
 
     st.markdown("🔬 *This is a demo app. For actual skin analysis, consult a dermatologist.*")
 
