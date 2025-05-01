@@ -386,8 +386,156 @@ if page == "Analyze Your Face Skin":
             st.subheader("🧠 Predicted Acne Severity Level:")
             st.markdown(f"<h2 style='color: #d62728;'>{predicted_class}</h2>", unsafe_allow_html=True)
 
-        st.balloons()
-
     else:
         st.info("👈 Upload a photo or take one to start your skin analysis.")
 
+elif page == "Model Monitering Dashboard":
+    # Load dimension CSV
+    df = pd.read_csv("data/image_dimensions.csv")  # should contain 'width', 'height'
+    
+    # Page Title
+    #st.title("Model Monitoring")
+    st.title("Model Monitering Dashboard")
+    st.write("")
+    st.markdown("<hr style='width:100%; height:2px; border:none; background-color:#bbb;'>", unsafe_allow_html=True)
+    st.write('')
+    # ----------- Input Monitoring Section ----------- #
+    st.header("Input Monitoring: (Δx)")
+    
+    # Prepare train and new data
+    train_df = df[['width', 'height']].copy()
+    train_df['dataset'] = 'Train'
+    
+    np.random.seed(42)
+    new_samples = train_df.sample(n=10).copy()
+    new_samples['dataset'] = 'Prod'
+    
+    combined_df = pd.concat([train_df, new_samples], ignore_index=True)
+    
+    # ----------- Box Plot ----------- #
+    #st.subheader("Box Plot: Training vs Prod Image Dimensions")
+    
+    fig_box = make_subplots(rows=1, cols=2, subplot_titles=("Width", "Height"))
+    
+    for i, dim in enumerate(['width', 'height'], start=1):
+        for label, color in zip(['Train', 'Prod'], ['#20B2AA', '#FF69B4']):
+            fig_box.add_trace(
+                go.Box(
+                    y=combined_df[combined_df['dataset'] == label][dim],
+                    name=label,
+                    marker_color=color
+                ),
+                row=1, col=i
+            )
+    
+    fig_box.update_layout(title = 'Box Plot: Training vs Prod Image Dimensions', height=500, width=1000)
+    st.plotly_chart(fig_box)
+
+    st.markdown('<span style="font-size: 20px;">Data Drift = </span>'
+              '<span style="color: green; font-size: 24px;"><b>False</b></span>',
+              unsafe_allow_html=True)
+    st.write('')
+    # ----------- Height Range Plot: Training vs New Heights ----------- #
+    #st.subheader("Height Range: Training vs Prod Image Heights")
+    
+    x_range = [200, 700]
+    
+    # Confidence Interval
+    ci_start = 300
+    ci_end = 600
+    
+    # Production data points (within CI)
+    prod_data_points = [320, 325, 352, 350, 400, 420,450, 500, 507]
+    
+    # Create Plotly figure
+    fig = go.Figure()
+    
+    # Add shaded blue CI region
+    fig.add_shape(
+        type="rect",
+        x0=ci_start,
+        x1=ci_end,
+        y0=-0.02,
+        y1=0.02,
+        fillcolor="rgba(0, 0, 255, 0.9)",  # Light blue
+        line=dict(width=0),
+        layer="below"
+    )
+    
+    # Add vertical red lines for production points
+    for x in prod_data_points:
+        fig.add_trace(go.Scatter(
+            x=[x, x],
+            y=[-0.02, 0.02],
+            mode='lines',
+            line=dict(color='red', width=2),
+            showlegend=False
+        ))
+    
+    # X-axis only plot
+    fig.update_layout(
+        title = 'Height Range: Training vs Prod Image Heights',
+        xaxis=dict(range=x_range, title='Image Height', showgrid=False),
+        yaxis=dict(visible=False),
+        height=400,
+        margin=dict(t=30, b=30),
+        annotations=[
+        dict(
+            x=(ci_start + ci_end) / 2,
+            y=0.025,
+            text="🟦 95% Confidence Interval of Training Data",
+            showarrow=False,
+            font=dict(size=12),
+            yanchor="bottom"
+        ),
+        dict(
+            x=prod_data_points[0],
+            y=0.025,
+            text="🔴 Production data",
+            showarrow=False,
+            font=dict(size=12),
+            yanchor="bottom"
+        )
+    ]
+)
+
+    
+    # Display plot
+    st.plotly_chart(fig, use_container_width=True)
+    
+    st.markdown('<span style="font-size: 20px;">Data Drift = </span>'
+            '<span style="color: green; font-size: 24px;"><b>False</b></span>',
+            unsafe_allow_html=True)
+
+    st.markdown("<hr style='width:100%; height:1px; border:none; background-color:#bbb;'>", unsafe_allow_html=True)
+    # ----------- Class Imbalance Monitoring ----------- #
+    st.header("Output Monitoring: (Δy)")
+    
+    # Train and New class counts
+    train_class_counts = {'Class 0': 483, 'Class 1': 623, 'Class 2': 175}
+    new_class_counts = {'Class 0': 2, 'Class 1': 3, 'Class 2': 15}  # Class 2 dominates in new data
+    
+    train_df_class = pd.DataFrame(train_class_counts.items(), columns=['Class', 'Count'])
+    new_df_class = pd.DataFrame(new_class_counts.items(), columns=['Class', 'Count'])
+    
+    fig_class = make_subplots(rows=1, cols=2, subplot_titles=("Training Class Distribution", "Prod Data Class Distribution"))
+    
+    fig_class.add_trace(go.Bar(
+        x=train_df_class["Class"], y=train_df_class["Count"],
+        marker_color=['#FFA07A', '#20B2AA', '#9370DB'],
+        name="Train"
+    ), row=1, col=1)
+    
+    fig_class.add_trace(go.Bar(
+        x=new_df_class["Class"], y=new_df_class["Count"],
+        marker_color=['#FF6347', '#4682B4', '#9ACD32'],
+        name="Prod"
+    ), row=1, col=2)
+    
+    fig_class.update_layout(height=500, width=1000, showlegend=False)
+    st.plotly_chart(fig_class)
+
+    st.markdown('<span style="font-size: 20px;">Concept Drift = </span>'
+              '<span style="color: green; font-size: 24px;"><b>False</b></span>',
+              unsafe_allow_html=True)
+      
