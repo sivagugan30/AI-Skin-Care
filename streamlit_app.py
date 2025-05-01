@@ -11,62 +11,8 @@ from PIL import Image
 import torch
 import requests
 import tempfile
-
-def load_model_from_url(model_url):
-    # Download the model file to a temporary file
-    response = requests.get(model_url)
-    response.raise_for_status()  # Raise error if download failed
-
-    with tempfile.NamedTemporaryFile(delete=False) as tmp_file:
-        tmp_file.write(response.content)
-        tmp_file_path = tmp_file.name
-
-    # Load the model from the temporary file
-    model = torch.load(tmp_file_path, weights_only=False, map_location=torch.device('cpu'))
-    model.eval()
-    return model
-
-
-def load_model(pkl_path):
-    """
-    Loads the model from the specified pickle path.
-    """
-    # Load model (including architecture and weights)
-    model = torch.load(pkl_path, weights_only=False, map_location=torch.device('cpu'))
-    model.eval()  # Set model to evaluation mode
-    return model
-
-def predict(image_path, model):
-    """
-    Given an image path and a trained model, this function predicts the class.
-    """
-    # Image preprocessing (adjust this based on your model's expected input)
-    transform = transforms.Compose([
-        transforms.Resize((224, 224)),  # Update if your model expects another size
-        transforms.ToTensor(),
-        transforms.Normalize(mean=[0.485, 0.456, 0.406],  # Example: for pretrained ResNet
-                             std=[0.229, 0.224, 0.225])
-    ])
-
-    # Load and transform image
-    image = Image.open(image_path).convert('RGB')
-    input_tensor = transform(image).unsqueeze(0)  # Add batch dimension
-
-    # Predict
-    with torch.no_grad():
-        output = model(input_tensor)
-        prediction = torch.argmax(output, dim=1).item()
-
-    return prediction
-
-model_url = "https://raw.githubusercontent.com/sivagugan30/AI-Skin-Care/main/data/acne_full_model.pkl"
-model = load_model_from_url(model_url)
-
 image_path = "https://github.com/sivagugan30/AI-Skin-Care/tree/main/data/1"
 
-
-# Predict on the image
-predicted_class = predict(image_path, model)
 
 
 def calculate_health_score(image_pil):
@@ -93,7 +39,7 @@ from PIL import Image, ImageEnhance, ImageFilter
 
 st.sidebar.title("Navigation")
 page = st.sidebar.radio("Go to", ["Home", "Instructions", "Analyze Your Face Skin", "Documentation",
-                                  "Model Monitering Dashboard", "Feedback"])
+                                  "Model Monitering Dashboard", "Feedback","trail"])
 
 if page == "Documentation":
     tab1, tab2, tab3, tab4 = st.tabs(["Data Collection", "Data Analysis", "Image Processing", "Model Development"])
@@ -298,3 +244,88 @@ elif page == "Feedback":
     feedback_text = st.text_area("Share your thoughts about the app:")
     if st.button("Submit Feedback"):
         st.success("Thank you for your feedback! 💙")
+
+
+
+
+
+
+
+
+
+
+
+
+
+import streamlit as st
+from PIL import Image
+import torch
+import torch.nn as nn
+from torchvision import transforms
+import requests
+import os
+
+# ---------------------------
+# Define the model architecture
+# ---------------------------
+class AcneClassifier(nn.Module):
+    def __init__(self, num_classes=3):  # Update this to your number of classes
+        super(AcneClassifier, self).__init__()
+        self.model = torch.hub.load('pytorch/vision:v0.10.0', 'resnet18', pretrained=False)
+        self.model.fc = nn.Linear(self.model.fc.in_features, num_classes)
+
+    def forward(self, x):
+        return self.model(x)
+
+# ---------------------------
+# Function to download weights
+# ---------------------------
+@st.cache_resource
+def load_model_from_url(url, num_classes=3):
+    # Download the weights
+    weights_path = "acne_model_weights.pth"
+    if not os.path.exists(weights_path):
+        r = requests.get(url)
+        with open(weights_path, "wb") as f:
+            f.write(r.content)
+
+    # Instantiate and load model
+    model = AcneClassifier(num_classes=num_classes)
+    model.load_state_dict(torch.load(weights_path, map_location=torch.device('cpu')))
+    model.eval()
+    return model
+
+# ---------------------------
+# Preprocessing
+# ---------------------------
+def preprocess_image(image):
+    transform = transforms.Compose([
+        transforms.Resize((224, 224)),
+        transforms.ToTensor(),
+        transforms.Normalize(mean=[0.485, 0.456, 0.406],
+                             std=[0.229, 0.224, 0.225])
+    ])
+    return transform(image).unsqueeze(0)  # Add batch dimension
+
+# ---------------------------
+# Streamlit App UI
+# ---------------------------
+elif page == "trail":
+    model_url = "https://raw.githubusercontent.com/sivagugan30/AI-Skin-Care/blob/main/acne_model_weights.pth"
+    
+    uploaded_file = st.file_uploader("Upload an image to classify acne severity", type=["jpg", "jpeg", "png"])
+    
+    if uploaded_file:
+        image = Image.open(uploaded_file).convert("RGB")
+        st.image(image, caption="Uploaded Image", use_column_width=True)
+    
+        st.write("Classifying...")
+    
+        input_tensor = preprocess_image(image)
+        model = load_model_from_url(model_url)
+    
+        with torch.no_grad():
+            output = model(input_tensor)
+            predicted_class = torch.argmax(output, dim=1).item()
+    
+        st.success(f"🎯 Predicted Class: {predicted_class}")
