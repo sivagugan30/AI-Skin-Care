@@ -1,7 +1,7 @@
 import streamlit as st
 from PIL import Image, ImageOps
 import numpy as np
-
+import plotly.graph_objects as go
 
 import torch
 from torchvision import transforms
