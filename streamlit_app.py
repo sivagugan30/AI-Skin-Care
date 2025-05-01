@@ -7,6 +7,26 @@ import torch
 from torchvision import transforms
 from PIL import Image
 
+
+import torch
+import requests
+import tempfile
+
+def load_model_from_url(model_url):
+    # Download the model file to a temporary file
+    response = requests.get(model_url)
+    response.raise_for_status()  # Raise error if download failed
+
+    with tempfile.NamedTemporaryFile(delete=False) as tmp_file:
+        tmp_file.write(response.content)
+        tmp_file_path = tmp_file.name
+
+    # Load the model from the temporary file
+    model = torch.load(tmp_file_path, weights_only=False, map_location=torch.device('cpu'))
+    model.eval()
+    return model
+
+
 def load_model(pkl_path):
     """
     Loads the model from the specified pickle path.
@@ -39,12 +59,11 @@ def predict(image_path, model):
 
     return prediction
 
-pkl_path = "https://raw.githubusercontent.com/sivagugan30/AI-Skin-Care/main/data/acne_full_model.pkl"
+model_url = "https://raw.githubusercontent.com/sivagugan30/AI-Skin-Care/main/data/acne_full_model.pkl"
+model = load_model_from_url(model_url)
 
 image_path = "https://github.com/sivagugan30/AI-Skin-Care/tree/main/data/1"
 
-# Load the model
-model = load_model(pkl_path)
 
 # Predict on the image
 predicted_class = predict(image_path, model)
