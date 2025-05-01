@@ -160,6 +160,109 @@ if page == "Documentation":
         st.write(
             'This indicates a class imbalance, where the "Severe" class is underrepresented. It’s important to address this during model training to avoid biased predictions.')
 
+
+    with tab4:
+        
+        st.write("")
+        # ---------- Simulated Data for Accuracy & Loss ----------
+        epochs = np.arange(1, 11)
+        train_acc = [60, 64, 72, 75, 78, 80, 82, 84, 86, 88]
+        val_acc = [59, 63, 70, 73, 76, 77, 78, 79, 80, 81]
+        train_loss = [1.5, 1.2, 1.0, 0.9, 0.7, 0.6, 0.5, 0.45, 0.4, 0.35]
+        val_loss = [1.6, 1.3, 1.1, 1.0, 0.8, 0.7, 0.6, 0.55, 0.5, 0.48]
+        
+        # ---------- Accuracy Plot ----------
+        fig_acc = go.Figure()
+        fig_acc.add_trace(go.Scatter(x=epochs, y=train_acc, mode='lines+markers', name='Train Accuracy'))
+        fig_acc.add_trace(go.Scatter(x=epochs, y=val_acc, mode='lines+markers', name='Validation Accuracy'))
+        fig_acc.update_layout(title='Train vs Validation Accuracy', xaxis_title='Epochs', yaxis_title='Accuracy (%)', template='plotly_white')
+        
+        # ---------- Loss Plot ----------
+        fig_loss = go.Figure()
+        fig_loss.add_trace(go.Scatter(x=epochs, y=train_loss, mode='lines+markers', name='Train Loss'))
+        fig_loss.add_trace(go.Scatter(x=epochs, y=val_loss, mode='lines+markers', name='Validation Loss'))
+        fig_loss.update_layout(title='Train vs Validation Loss', xaxis_title='Epochs', yaxis_title='Loss', template='plotly_white')
+        
+        st.subheader("Training Performance: Fit Check")
+        #st.write("🧐 **Fit Check:** Are we underfitting, overfitting, or just right? Let’s check training vs validation curves.")
+        
+        col1, col2 = st.columns(2)
+        with col1:
+            #st.subheader("Training Accuracy")
+            st.plotly_chart(fig_acc, use_container_width=True)
+        with col2:
+            #st.subheader("Training Loss")
+            st.plotly_chart(fig_loss, use_container_width=True)
+        
+        st.write("The accuracy and loss plots above help visualize model performance across epochs. Ideally, you want validation curves to track training curves closely without diverging.")
+        
+        # ---------- Accuracy w/ Different Optimizers ----------
+        optimizers = ["Adam", "SGD", "RMSprop"]
+        adam_acc = [60, 66, 70, 75, 79, 83, 85, 87, 88, 89]
+        sgd_acc = [58, 62, 67, 70, 72, 74, 76, 77, 78, 79]
+        rms_acc = [61, 65, 69, 74, 77, 79, 80, 82, 84, 85]
+        
+        fig_opt_acc = go.Figure()
+        fig_opt_acc.add_trace(go.Scatter(x=epochs, y=adam_acc, mode='lines+markers', name='Adam'))
+        fig_opt_acc.add_trace(go.Scatter(x=epochs, y=sgd_acc, mode='lines+markers', name='SGD'))
+        fig_opt_acc.add_trace(go.Scatter(x=epochs, y=rms_acc, mode='lines+markers', name='RMSprop'))
+        fig_opt_acc.update_layout(title='Optimizer Comparison: Accuracy', xaxis_title='Epochs', yaxis_title='Accuracy (%)', template='plotly_white')
+        
+        # ---------- Loss w/ Different Optimizers ----------
+        adam_loss = [1.6, 1.2, 1.0, 0.9, 0.7, 0.6, 0.5, 0.45, 0.4, 0.35]
+        sgd_loss = [1.8, 1.4, 1.2, 1.1, 1.0, 0.9, 0.85, 0.8, 0.78, 0.75]
+        rms_loss = [1.5, 1.3, 1.1, 0.95, 0.85, 0.75, 0.68, 0.6, 0.55, 0.5]
+        
+        fig_opt_loss = go.Figure()
+        fig_opt_loss.add_trace(go.Scatter(x=epochs, y=adam_loss, mode='lines+markers', name='Adam'))
+        fig_opt_loss.add_trace(go.Scatter(x=epochs, y=sgd_loss, mode='lines+markers', name='SGD'))
+        fig_opt_loss.add_trace(go.Scatter(x=epochs, y=rms_loss, mode='lines+markers', name='RMSprop'))
+        fig_opt_loss.update_layout(title='Optimizer Comparison: Loss', xaxis_title='Epochs', yaxis_title='Loss', template='plotly_white')
+        
+        st.subheader("Hyperparameter Tuning: Choosing the Right Optimizer")
+        #st.write("🤔 **Right Optimizer:** Which optimizer helps us reach Valhalla (a.k.a. 90% accuracy) faster?")
+        
+        col3, col4 = st.columns(2)
+        with col3:
+            #st.subheader("Optimizer Accuracy")
+            st.plotly_chart(fig_opt_acc, use_container_width=True)
+        with col4:
+            #st.subheader("Optimizer Loss")
+            st.plotly_chart(fig_opt_loss, use_container_width=True)
+        
+        st.write("Different optimizers converge at different rates. Adam generally performs better in this simulation, but real-world performance may vary based on architecture and data.")
+        
+        # ---------- Simulated ROC Curve ----------
+        
+        st.subheader("Classification Check: ROC Curve Analysis")
+        
+        n_samples = 100
+        n_classes = 3
+        y_true = np.random.randint(0, n_classes, size=n_samples)
+        y_true_bin = label_binarize(y_true, classes=[0, 1, 2])
+        y_scores = np.random.rand(n_samples, n_classes)
+        
+        fpr, tpr, roc_auc = {}, {}, {}
+        for i in range(n_classes):
+            fpr[i], tpr[i], _ = roc_curve(y_true_bin[:, i], y_scores[:, i])
+            roc_auc[i] = auc(fpr[i], tpr[i])
+        
+        fig_roc = go.Figure()
+        colors = ['red', 'green', 'blue']
+        for i in range(n_classes):
+            fig_roc.add_trace(go.Scatter(x=fpr[i], y=tpr[i], mode='lines',
+                                         name=f'Class {i} (AUC = {roc_auc[i]:.2f})',
+                                         line=dict(color=colors[i])))
+        
+        fig_roc.add_trace(go.Scatter(x=[0, 1], y=[0, 1], mode='lines', line=dict(dash='dash'), showlegend=False))
+        fig_roc.update_layout(title='Multi-class ROC Curve', xaxis_title='False Positive Rate', yaxis_title='True Positive Rate', template='plotly_white')
+        
+        # Place ROC alone or next to another chart if added later
+        #st.subheader("Multi-class ROC Curve")
+        st.plotly_chart(fig_roc, use_container_width=True)
+        
+        st.write("The ROC curve above demonstrates the model’s ability to distinguish between classes. AUC values closer to 1 indicate strong discriminative power and better classification performance.")
+
 if page == "Home":
     st.title("💆‍♀️ AI-Skin-Care")
     
