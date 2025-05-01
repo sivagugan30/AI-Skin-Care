@@ -38,7 +38,7 @@ from PIL import Image, ImageEnhance, ImageFilter
 
 st.sidebar.title("Navigation")
 page = st.sidebar.radio("Go to", ["Home", "Instructions", "Analyze Your Face Skin", "Documentation",
-                                  "Model Monitering Dashboard", "Feedback","trail"])
+                                  "Model Monitering Dashboard", "Feedback"])
 
 if page == "Documentation":
     tab1, tab2, tab3, tab4 = st.tabs(["Data Collection", "Data Analysis", "Image Processing", "Model Development"])
@@ -238,30 +238,7 @@ def preprocess_image(image):
     ])
     return transform(image).unsqueeze(0)  # Add batch dimension
 
-# ---------------------------
-# Streamlit App UI
-# ---------------------------
-if page == "trail":
-    model_url =  "https://raw.githubusercontent.com/sivagugan30/AI-Skin-Care/main/acne_model_weights.pth"
-    
-    uploaded_file = st.file_uploader("Upload an image to classify acne severity", type=["jpg", "jpeg", "png"])
-    
-    if uploaded_file:
-        image = Image.open(uploaded_file).convert("RGB")
-        st.image(image, caption="Uploaded Image", use_column_width=True)
-    
-        st.write("Classifying...")
-    
-        input_tensor = preprocess_image(image)
-        model = load_model_from_url(model_url)
-    
-        with torch.no_grad():
-            output = model(input_tensor)
-            predicted_class = torch.argmax(output, dim=1).item()
-    
-        st.success(f"🎯 Predicted Class: {predicted_class}")
-
-elif page == "Analyze Your Face Skin":
+if page == "Analyze Your Face Skin":
     st.title("🔍 Analyze Your Face Skin")
     st.markdown("Choose a method to analyze your skin:")
 
