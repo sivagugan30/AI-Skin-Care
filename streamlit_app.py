@@ -14,6 +14,19 @@ import torch
 import requests
 import tempfile
 
+import numpy as np
+from sklearn.metrics import roc_curve, auc
+from sklearn.preprocessing import label_binarize
+import plotly.graph_objects as go  
+import os
+import pandas as pd
+import plotly.express as px
+from pathlib import Path
+import random
+from PIL import Image, ImageEnhance, ImageFilter
+from plotly.subplots import make_subplots
+
+
 
 
 def calculate_health_score(image_pil):
