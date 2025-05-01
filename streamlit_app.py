@@ -11,7 +11,6 @@ from PIL import Image
 import torch
 import requests
 import tempfile
-image_path = "https://github.com/sivagugan30/AI-Skin-Care/tree/main/data/1"
 
 
 
