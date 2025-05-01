@@ -284,7 +284,9 @@ elif page == "Analyze Your Face Skin":
     if image:
         #st.image(image, caption='Your Face Photo', use_column_width=True)
         with st.spinner("Analyzing your skin health..."):
-            
+            model_url =  "https://raw.githubusercontent.com/sivagugan30/AI-Skin-Care/main/acne_model_weights.pth"
+    
+            uploaded_file = st.file_uploader("Upload an image to classify acne severity", type=["jpg", "jpeg", "png"])
             score = calculate_health_score(image)
     
             # Show score
