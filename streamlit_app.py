@@ -170,73 +170,6 @@ elif page == "Instructions":
     st.title("📖 Instructions")
     st.markdown("1. Make sure you are in a well-lit environment.\n2. Remove any heavy makeup for an accurate result.\n3. Position your face clearly in the camera frame.\n4. Click the 'Take Photo' button.\n5. Wait for your skin health score!")
 
-elif page == "Analyze Your Face Skin":
-    st.title("🔍 Analyze Your Face Skin")
-    st.markdown("Choose a method to analyze your skin:")
-
-    option = st.radio("Select input type:", ["Upload an Image", "Take a Photo"])
-    image = None
-
-    if option == "Upload an Image":
-        uploaded_image = st.file_uploader("Upload a face image", type=["jpg", "jpeg", "png"])
-        if uploaded_image is not None:
-            image = Image.open(uploaded_image).convert("RGB")
-            st.success("Image uploaded successfully!")
-
-    elif option == "Take a Photo":
-        camera_photo = st.camera_input("Take a photo")
-        if camera_photo is not None:
-            image = Image.open(camera_photo).convert("RGB")
-            st.success("Photo captured successfully!")
-
-    if image:
-        #st.image(image, caption='Your Face Photo', use_column_width=True)
-        with st.spinner("Analyzing your skin health..."):
-            # Score calculation
-            score = calculate_health_score(image)
-
-            # Show score
-            st.subheader("🧬 Your Skin Health Score:")
-            st.markdown(f"<h1 style='color: teal; font-size: 60px'>{score} / 100</h1>", unsafe_allow_html=True)
-
-            # 🧠 Load model and predict class
-            import torch
-            import torchvision.transforms as transforms
-            from torchvision import models  # or your custom model import
-            from PIL import Image
-
-            device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-
-            # Load model (define your model architecture if it's custom)
-            model = models.resnet18(pretrained=False)
-            model.fc = torch.nn.Linear(model.fc.in_features, 3)  # assuming 3 classes
-            model.load_state_dict(torch.load("model/acne_model.pth", map_location=device))
-            model.to(device)
-            model.eval()
-
-            class_names = ["Mild", "Moderate", "Severe"]  # Customize to your labels
-
-            # Transform and predict
-            test_transform = transforms.Compose([
-                transforms.Resize((224, 224)),
-                transforms.ToTensor(),
-                transforms.Normalize([0.5], [0.5])
-            ])
-
-            img_tensor = test_transform(image).unsqueeze(0).to(device)
-
-            with torch.no_grad():
-                output = model(img_tensor)
-                _, predicted = torch.max(output, 1)
-
-            predicted_class = class_names[predicted.item()]
-            st.subheader("🧠 Predicted Acne Severity Level:")
-            st.markdown(f"<h2 style='color: #d62728;'>{predicted_class}</h2>", unsafe_allow_html=True)
-
-        st.balloons()
-
-    else:
-        st.info("👈 Upload a photo or take one to start your skin analysis.")
 
 elif page == "Feedback":
     st.title("📝 Feedback")
@@ -328,3 +261,50 @@ if page == "trail":
             predicted_class = torch.argmax(output, dim=1).item()
     
         st.success(f"🎯 Predicted Class: {predicted_class}")
+
+elif page == "Analyze Your Face Skin":
+    st.title("🔍 Analyze Your Face Skin")
+    st.markdown("Choose a method to analyze your skin:")
+
+    option = st.radio("Select input type:", ["Upload an Image", "Take a Photo"])
+    image = None
+
+    if option == "Upload an Image":
+        uploaded_image = st.file_uploader("Upload a face image", type=["jpg", "jpeg", "png"])
+        if uploaded_image is not None:
+            image = Image.open(uploaded_image).convert("RGB")
+            st.success("Image uploaded successfully!")
+
+    elif option == "Take a Photo":
+        camera_photo = st.camera_input("Take a photo")
+        if camera_photo is not None:
+            image = Image.open(camera_photo).convert("RGB")
+            st.success("Photo captured successfully!")
+
+    if image:
+        #st.image(image, caption='Your Face Photo', use_column_width=True)
+        with st.spinner("Analyzing your skin health..."):
+            
+            score = calculate_health_score(image)
+    
+            # Show score
+            st.subheader("🧬 Your Skin Health Score:")
+            st.markdown(f"<h1 style='color: teal; font-size: 60px'>{score} / 100</h1>", unsafe_allow_html=True)
+
+            input_tensor = preprocess_image(image)
+            model = load_model_from_url(model_url)
+        
+            with torch.no_grad():
+                output = model(input_tensor)
+                predicted_class = torch.argmax(output, dim=1).item()
+    
+            st.success(f"🎯 Predicted Class: {predicted_class}")
+            
+            st.subheader("🧠 Predicted Acne Severity Level:")
+            st.markdown(f"<h2 style='color: #d62728;'>{predicted_class}</h2>", unsafe_allow_html=True)
+
+        st.balloons()
+
+    else:
+        st.info("👈 Upload a photo or take one to start your skin analysis.")
+
