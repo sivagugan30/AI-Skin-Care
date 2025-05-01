@@ -24,7 +24,7 @@ def calculate_health_score(image_pil):
     final_score = int((brightness_score * 0.4 + contrast_score * 0.6))
     return final_score
 
-st.set_page_config(page_title="AI-Skin-Care", layout="centered")
+st.set_page_config(page_title="AI-Skin-Care", layout="wide")
 
 import streamlit as st
 from PIL import Image
