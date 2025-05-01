@@ -106,7 +106,7 @@ if page == "Documentation":
         st.markdown("### Standardizing Image Dimensions")
 
         # Load the saved CSV
-        input_path = os.path.expanduser("~/Downloads/image_dimensions.csv")
+        input_path = os.path.expanduser("data/image_dimensions.csv")
         try:
             df = pd.read_csv(input_path)
 
