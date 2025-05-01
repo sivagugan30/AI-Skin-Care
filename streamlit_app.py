@@ -163,8 +163,7 @@ if page == "Documentation":
 
 if page == "Home":
     st.title("💆‍♀️ AI-Skin-Care")
-    st.write(f"Predicted class: {predicted_class}")
-
+    
     st.markdown("🔬 *This is a demo app. For actual skin analysis, consult a dermatologist.*")
 
 elif page == "Instructions":
