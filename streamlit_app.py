@@ -39,9 +39,8 @@ def predict(image_path, model):
 
     return prediction
 
-# Example usage:
 pkl_path = "https://github.com/sivagugan30/AI-Skin-Care/blob/main/data/acne_full_model.pkl"
-image_path = "https://github.com/sivagugan30/AI-Skin-Care/tree/main/data/1"  # Replace with the path to the image you want to predict
+image_path = "https://github.com/sivagugan30/AI-Skin-Care/tree/main/data/1"
 
 # Load the model
 model = load_model(pkl_path)
@@ -49,7 +48,6 @@ model = load_model(pkl_path)
 # Predict on the image
 predicted_class = predict(image_path, model)
 
-#st.write(f"Predicted class: {predicted_class}")
 
 def calculate_health_score(image_pil):
     grayscale_img = ImageOps.grayscale(image_pil)
@@ -199,6 +197,7 @@ if page == "Documentation":
 
 if page == "Home":
     st.title("💆‍♀️ AI-Skin-Care")
+    st.write(f"Predicted class: {predicted_class}")
 
     st.markdown("🔬 *This is a demo app. For actual skin analysis, consult a dermatologist.*")
 
