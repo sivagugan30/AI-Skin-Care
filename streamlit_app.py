@@ -400,6 +400,9 @@ if page == "Analyze Your Face Skin":
             
             st.subheader("Predicted Acne Severity Level:")
             st.markdown(f"<h2 style='color: #d62728;'>{severity_text}</h2>", unsafe_allow_html=True)
+
+            st.markdown("*This is a demo app for educational purpose. For actual skin analysis, consult a dermatologist.*")
+
             
     else:
                 st.info("Upload a photo or take one to start your skin analysis.")
