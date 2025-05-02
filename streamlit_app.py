@@ -26,19 +26,6 @@ import random
 from PIL import Image, ImageEnhance, ImageFilter
 from plotly.subplots import make_subplots
 
-
-
-
-def calculate_health_score(image_pil):
-    grayscale_img = ImageOps.grayscale(image_pil)
-    img_array = np.array(grayscale_img).astype('float')
-    brightness = np.mean(img_array)
-    contrast = np.std(img_array)
-    brightness_score = max(0, min(100, (brightness - 50) * 1.2))
-    contrast_score = max(0, min(100, (contrast - 20) * 2))
-    final_score = int((brightness_score * 0.4 + contrast_score * 0.6))
-    return final_score
-
 st.set_page_config(page_title="AI-Skin-Care", layout="wide")
 
 import streamlit as st
@@ -381,6 +368,20 @@ if page == "Analyze Your Face Skin":
             model_url =  "https://raw.githubusercontent.com/sivagugan30/AI-Skin-Care/main/acne_model_weights.pth"
     
             uploaded_file = st.file_uploader("Upload an image to classify acne severity", type=["jpg", "jpeg", "png"])
+            
+            def calculate_health_score(image_pil):
+                grayscale_img = ImageOps.grayscale(image_pil)
+                img_array = np.array(grayscale_img).astype('float')
+                brightness = np.mean(img_array)
+                contrast = np.std(img_array)
+            
+                brightness_score = max(0, min(100, (brightness - 50) * 1.2))
+                contrast_score = max(0, min(100, (contrast - 20) * 2))
+            
+                raw_score = (brightness_score * 0.4 + contrast_score * 0.6)
+                final_score = int(max(50, min(100, raw_score)))  # clamp between 50 and 100
+            
+                return final_score
             score = calculate_health_score(image)
     
             # Show score
@@ -393,14 +394,15 @@ if page == "Analyze Your Face Skin":
             with torch.no_grad():
                 output = model(input_tensor)
                 predicted_class = torch.argmax(output, dim=1).item()
-    
-            st.success(f"🎯 Predicted Class: {predicted_class}")
             
-            st.subheader("🧠 Predicted Acne Severity Level:")
-            st.markdown(f"<h2 style='color: #d62728;'>{predicted_class}</h2>", unsafe_allow_html=True)
-
+            severity_labels = {0: "Mild", 1: "Moderate", 2: "Severe"}
+            severity_text = severity_labels.get(predicted_class, "Unknown")
+            
+            st.subheader("Predicted Acne Severity Level:")
+            st.markdown(f"<h2 style='color: #d62728;'>{severity_text}</h2>", unsafe_allow_html=True)
+            
     else:
-        st.info("👈 Upload a photo or take one to start your skin analysis.")
+                st.info("Upload a photo or take one to start your skin analysis.")
 
 elif page == "Model Monitering Dashboard":
     # Load dimension CSV
