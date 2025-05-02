@@ -385,7 +385,7 @@ if page == "Analyze Your Face Skin":
             score = calculate_health_score(image)
     
             # Show score
-            st.subheader("🧬 Your Skin Health Score:")
+            st.subheader("Your Skin Health Score:")
             st.markdown(f"<h1 style='color: teal; font-size: 60px'>{score} / 100</h1>", unsafe_allow_html=True)
 
             input_tensor = preprocess_image(image)
