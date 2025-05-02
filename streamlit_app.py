@@ -279,17 +279,17 @@ if page == "Documentation":
         st.write("The ROC curve above demonstrates the model’s ability to distinguish between classes. AUC values closer to 1 indicate strong discriminative power and better classification performance.")
 
 if page == "Home":
-    st.title("💆‍♀️ AI-Skin-Care")
+    st.title("AI-Skin-Care")
     
-    st.markdown("🔬 *This is a demo app. For actual skin analysis, consult a dermatologist.*")
+    st.markdown("*This is a demo app for educational purpose. For actual skin analysis, consult a dermatologist.*")
 
 elif page == "Instructions":
-    st.title("📖 Instructions")
+    st.title("Instructions")
     st.markdown("1. Make sure you are in a well-lit environment.\n2. Remove any heavy makeup for an accurate result.\n3. Position your face clearly in the camera frame.\n4. Click the 'Take Photo' button.\n5. Wait for your skin health score!")
 
 
 elif page == "Feedback":
-    st.title("📝 Feedback")
+    st.title("Feedback")
     feedback_text = st.text_area("Share your thoughts about the app:")
     if st.button("Submit Feedback"):
         st.success("Thank you for your feedback! 💙")
